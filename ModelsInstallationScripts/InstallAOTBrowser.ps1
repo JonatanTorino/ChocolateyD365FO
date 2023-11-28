@@ -7,8 +7,8 @@ $localPath = "K:\Axxon\GitHub.JonatanTorino\AOTBrowser"
 git clone $repositoryUrl $localPath | Wait-Process
 
 # Task 2: Create a symbolic link
-$targetPath = "K:\Axxon\GitHub.JonatanTorino\AOTBrowser\Metadata\AOTBrowser"
 $modelName = "AOTBrowser"
+$targetPath = "K:\Axxon\GitHub.JonatanTorino\AOTBrowser\Metadata\"+$modelName
 $linkPath = "K:\AosService\PackagesLocalDirectory\"+$modelName
 
 Write-Host 'Remove existing directory if it exists'
