@@ -12,7 +12,7 @@ $targetPath = "K:\Axxon\GitHub.JonatanTorino\DevAxCmmRtsLog\"+$modelName
 $linkPath = "K:\AosService\PackagesLocalDirectory\"+$modelName
 
 Write-Host 'Remove existing directory if it exists'
-Remove-Item -Path $linkPath -Recurse -Force -ErrorAction SilentlyContinue
+cmd /c rmdir /q /s $linkPath
 
 Write-Host 'Create a symbolic link'
 New-Item -ItemType SymbolicLink -Path $linkPath -Target $targetPath
