@@ -1,11 +1,11 @@
 Esta sección es para automatizar las instalaciones de extensiones para VisualStudio
 - TRUDUtilsD365
 
-### Using Power Shell
-Copy and past
+# Instalacion usando Power Shell
+Copiar y pegar en consola
 
-[TRUDUtilsD365](https://github.com/TrudAX/TRUDUtilsD365)
-#### For VS 2022
+## [TRUDUtilsD365](https://github.com/TrudAX/TRUDUtilsD365)
+### For VS 2022
 ```powershell
 $repo = "TrudAX/TRUDUtilsD365"
 $releases = "https://api.github.com/repos/$repo/releases"
@@ -35,7 +35,7 @@ Start-Process "InstallToVS.exe" -Verb runAs
 
 ```
 
-# For VS 2019
+### For VS 2019
 ```powershell
 $repo = "TrudAX/TRUDUtilsD365"
 $path = "C:\AAA_VS2019"
