@@ -15,12 +15,12 @@ $localPath = "K:\Axxon\GitHub.JonatanTorino\DevAxCmmRtsLog"
 git clone $repositoryUrl $localPath | Wait-Process
 
 # Task 2: Create a symbolic link
-$targetPath = "K:\Axxon\GitHub.JonatanTorino\DevAxCmmRtsLog\DevAxCmmRtsLog"
 $modelName = "DevAxCmmRtsLog"
+$targetPath = "K:\Axxon\GitHub.JonatanTorino\DevAxCmmRtsLog\"+$modelName
 $linkPath = "K:\AosService\PackagesLocalDirectory\"+$modelName
 
 Write-Host 'Remove existing directory if it exists'
-Remove-Item -Path $linkPath -Recurse -Force -ErrorAction SilentlyContinue
+cmd /c rmdir /q /s $linkPath
 
 Write-Host 'Create a symbolic link'
 New-Item -ItemType SymbolicLink -Path $linkPath -Target $targetPath
@@ -42,12 +42,12 @@ $localPath = "K:\Axxon\GitHub.JonatanTorino\AOTBrowser"
 git clone $repositoryUrl $localPath | Wait-Process
 
 # Task 2: Create a symbolic link
-$targetPath = "K:\Axxon\GitHub.JonatanTorino\AOTBrowser\Metadata\AOTBrowser"
 $modelName = "AOTBrowser"
+$targetPath = "K:\Axxon\GitHub.JonatanTorino\AOTBrowser\Metadata\"+$modelName
 $linkPath = "K:\AosService\PackagesLocalDirectory\"+$modelName
 
 Write-Host 'Remove existing directory if it exists'
-Remove-Item -Path $linkPath -Recurse -Force -ErrorAction SilentlyContinue
+cmd /c rmdir /q /s $linkPath
 
 Write-Host 'Create a symbolic link'
 New-Item -ItemType SymbolicLink -Path $linkPath -Target $targetPath
@@ -82,7 +82,7 @@ $targetPath = "K:\Axxon\GitHub.JonatanTorino\XppTools\"+$modelName
 $linkPath = "K:\AosService\PackagesLocalDirectory\"+$modelName
 
 Write-Host 'Remove existing directory if it exists'
-Remove-Item -Path $linkPath -Recurse -Force -ErrorAction SilentlyContinue
+cmd /c rmdir /q /s $linkPath
 
 Write-Host 'Create a symbolic link'
 New-Item -ItemType SymbolicLink -Path $linkPath -Target $targetPath
