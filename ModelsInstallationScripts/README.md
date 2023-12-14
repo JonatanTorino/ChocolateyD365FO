@@ -7,6 +7,9 @@ Copy and past
 ### [DevAxCmmRtsLog](https://github.com/JonatanTorino/DevAxCmmRtsLog)
 Este modelo sirve para tener un registro del intercambio de mensajes entre el RTS y el RetailServer
 ```powershell
+Write-Host -ForegroundColor Yellow "Deteniendo todos los servicios de D365FO"
+Stop-D365Environment
+
 # Task 1: Clone the repository
 $repositoryUrl = "https://github.com/JonatanTorino/DevAxCmmRtsLog"
 $localPath = "K:\Axxon\GitHub.JonatanTorino\DevAxCmmRtsLog"
@@ -19,21 +22,29 @@ $modelName = "DevAxCmmRtsLog"
 $targetPath = "K:\Axxon\GitHub.JonatanTorino\DevAxCmmRtsLog\"+$modelName
 $linkPath = "K:\AosService\PackagesLocalDirectory\"+$modelName
 
-Write-Host 'Remove existing directory if it exists'
+Write-Host -ForegroundColor Blue "Remove existing directory if it exists $linkPath"
 cmd /c rmdir /q /s $linkPath
 
-Write-Host 'Create a symbolic link'
+Write-Host -ForegroundColor Blue "Create a symbolic link to $targetPath"
 New-Item -ItemType SymbolicLink -Path $linkPath -Target $targetPath
 
 # Task 3: Compile the model
-Write-Host 'Executing the D365 module compile command'
+Write-Host -ForegroundColor Green "Executing the D365 module compile command: $modelName"
 Invoke-D365ModuleFullCompile -Module $modelName
+
+Start-D365Environment -Aos
+Write-Host -ForegroundColor Yellow "Iniciando el servicio del AOS de D365FO"
+Start-D365Environment -Batch
+Write-Host -ForegroundColor Yellow "Iniciando el servicio del BATCH de D365FO"
 
 ```
 
 ### [AOTBrowser](https://github.com/arganollc/aotbrowser)
 Dynamics 365 for Finance and Operations AOT Browser
 ```powershell
+Write-Host -ForegroundColor Yellow "Deteniendo todos los servicios de D365FO"
+Stop-D365Environment
+
 # Task 1: Clone the repository
 $repositoryUrl = "https://github.com/arganollc/aotbrowser"
 $localPath = "K:\Axxon\GitHub.JonatanTorino\AOTBrowser"
@@ -46,15 +57,20 @@ $modelName = "AOTBrowser"
 $targetPath = "K:\Axxon\GitHub.JonatanTorino\AOTBrowser\Metadata\"+$modelName
 $linkPath = "K:\AosService\PackagesLocalDirectory\"+$modelName
 
-Write-Host 'Remove existing directory if it exists'
+Write-Host -ForegroundColor Blue 'Remove existing directory if it exists'
 cmd /c rmdir /q /s $linkPath
 
-Write-Host 'Create a symbolic link'
+Write-Host -ForegroundColor Blue 'Create a symbolic link'
 New-Item -ItemType SymbolicLink -Path $linkPath -Target $targetPath
 
 # Task 3: Compile the model
-Write-Host 'Executing the D365 module compile command'
+Write-Host -ForegroundColor Green 'Executing the D365 module compile command'
 Invoke-D365ModuleFullCompile -Module $modelName
+
+Start-D365Environment -Aos
+Write-Host -ForegroundColor Yellow "Iniciando el servicio del AOS de D365FO"
+Start-D365Environment -Batch
+Write-Host -ForegroundColor Yellow "Iniciando el servicio del BATCH de D365FO"
 
 ```
 
