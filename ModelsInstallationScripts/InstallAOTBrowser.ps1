@@ -1,27 +1,28 @@
 
-Write-Host -ForegroundColor Yellow "Deteniendo todos los servicios de D365FO"
-Stop-D365Environment
-
 # Task 1: Clone the repository
 $repositoryUrl = "https://github.com/arganollc/aotbrowser"
 $localPath = "K:\Axxon\GitHub.JonatanTorino\AOTBrowser"
+$modelName = "AOTBrowser"
 
 # Clone the repository
 git clone $repositoryUrl $localPath | Wait-Process
 
-# Task 2: Create a symbolic link
-$modelName = "AOTBrowser"
-$targetPath = "K:\Axxon\GitHub.JonatanTorino\AOTBrowser\Metadata\"+$modelName
-$linkPath = "K:\AosService\PackagesLocalDirectory\"+$modelName
+Write-Host -ForegroundColor Yellow "Deteniendo todos los servicios de D365FO"
+Stop-D365Environment
 
-Write-Host -ForegroundColor Blue 'Remove existing directory if it exists'
+# Task 2: Create a symbolic link
+$packagesLocalDirectory = "K:\AosService\PackagesLocalDirectory"
+$targetPath = Join-Path $localPath -ChildPath $modelName
+$linkPath = Join-Path $packagesLocalDirectory -ChildPath $modelName
+
+Write-Host -ForegroundColor Blue "Remove existing directory if it exists $linkPath"
 cmd /c rmdir /q /s $linkPath
 
-Write-Host -ForegroundColor Blue 'Create a symbolic link'
+Write-Host -ForegroundColor Blue "Create a symbolic link to $targetPath"
 New-Item -ItemType SymbolicLink -Path $linkPath -Target $targetPath
 
 # Task 3: Compile the model
-Write-Host -ForegroundColor Green 'Executing the D365 module compile command'
+Write-Host -ForegroundColor Green "Executing the D365 module compile command: $modelName"
 Invoke-D365ModuleFullCompile -Module $modelName
 
 Start-D365Environment -Aos

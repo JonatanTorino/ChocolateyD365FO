@@ -1,18 +1,19 @@
 
-Write-Host -ForegroundColor Yellow "Deteniendo todos los servicios de D365FO"
-Stop-D365Environment
-
 # Task 1: Clone the repository
 $repositoryUrl = "https://github.com/JonatanTorino/DevAxCmmRtsLog"
 $localPath = "K:\Axxon\GitHub.JonatanTorino\DevAxCmmRtsLog"
+$modelName = "DevAxCmmRtsLog"
 
 # Clone the repository
 git clone $repositoryUrl $localPath | Wait-Process
 
+Write-Host -ForegroundColor Yellow "Deteniendo todos los servicios de D365FO"
+Stop-D365Environment
+
 # Task 2: Create a symbolic link
-$modelName = "DevAxCmmRtsLog"
-$targetPath = "K:\Axxon\GitHub.JonatanTorino\DevAxCmmRtsLog\"+$modelName
-$linkPath = "K:\AosService\PackagesLocalDirectory\"+$modelName
+$packagesLocalDirectory = "K:\AosService\PackagesLocalDirectory"
+$targetPath = Join-Path $localPath -ChildPath $modelName
+$linkPath = Join-Path $packagesLocalDirectory -ChildPath $modelName
 
 Write-Host -ForegroundColor Blue "Remove existing directory if it exists $linkPath"
 cmd /c rmdir /q /s $linkPath
