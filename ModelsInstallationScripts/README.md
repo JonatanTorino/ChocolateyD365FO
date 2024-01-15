@@ -33,10 +33,10 @@ New-Item -ItemType SymbolicLink -Path $linkPath -Target $targetPath
 Write-Host -ForegroundColor Green "Executing the D365 module compile command: $modelName"
 Invoke-D365ModuleFullCompile -Module $modelName
 
-Start-D365Environment -Aos
 Write-Host -ForegroundColor Yellow "Iniciando el servicio del AOS de D365FO"
-Start-D365Environment -Batch
+Start-D365Environment -Aos
 Write-Host -ForegroundColor Yellow "Iniciando el servicio del BATCH de D365FO"
+Start-D365Environment -Batch
 
 ```
 
@@ -69,10 +69,10 @@ New-Item -ItemType SymbolicLink -Path $linkPath -Target $targetPath
 Write-Host -ForegroundColor Green "Executing the D365 module compile command: $modelName"
 Invoke-D365ModuleFullCompile -Module $modelName
 
-Start-D365Environment -Aos
 Write-Host -ForegroundColor Yellow "Iniciando el servicio del AOS de D365FO"
-Start-D365Environment -Batch
+Start-D365Environment -Aos
 Write-Host -ForegroundColor Yellow "Iniciando el servicio del BATCH de D365FO"
+Start-D365Environment -Batch
 
 ```
 
