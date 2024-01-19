@@ -25,6 +25,9 @@ Else {
     curl -o $env:TEMP\JonasPackages.config https://raw.githubusercontent.com/JonatanTorino/ChocolateyD365FO/main/JonasPackages.config
 
     choco install $env:TEMP\JonasPackages.config -y
+
+    choco install Nuget.CommandLine
+    nuget sources add -Name NugetOrg -Source https://api.nuget.org/v3/index.json
 }
 #endregion
 
