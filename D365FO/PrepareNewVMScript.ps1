@@ -5,7 +5,6 @@ Install-Module -Name SqlServer -AllowClobber
 Install-Module -Name d365fo.tools -AllowClobber
 Add-D365WindowsDefenderRules
 Invoke-D365InstallAzCopy
-Invoke-D365InstallSqlPackage
 #endregion
 
 
