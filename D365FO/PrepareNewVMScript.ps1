@@ -107,13 +107,13 @@ Function downloadReleaseFromGitHub {
 
 
 #region Install extensions para VisualStudio
-
 # TrudUtilsD365 2022
-$pathForVSIX = "K:\Axxon\VSExtensions"
+$pathAxxon = "K:\Axxon"
+$pathForVSIX = "$pathAxxon\VSExtensions"
 downloadReleaseFromGitHub -repo "TrudAX/TRUDUtilsD365" -path "$pathForVSIX\TRUDUtilsD365" -filesToDownload @("InstallToVS.exe", "TRUDUtilsD365.dll", "TRUDUtilsD365.pdb") -filesToExecute @("InstallToVS.exe")
 
 # Debug Attach Manager 2019
-downloadReleaseFromGitHub -repo "karpach/debug-attach-manager" -path "K:\Axxon\VSExtensions" -filesToDownload @("DebugAttachHistory.vsix")
+downloadReleaseFromGitHub -repo "karpach/debug-attach-manager" -path $pathForVSIX -filesToDownload @("DebugAttachHistory.vsix")
 
 # Debug Attach Manager 2022
 curl -o "$pathForVSIX\DebugAttachManager2022.vsix" https://viktarkarpach.gallerycdn.vsassets.io/extensions/viktarkarpach/debugattachmanager2022/2.4.220301.0/1646780693672/DebugAttachHistory.vsix
@@ -130,4 +130,8 @@ foreach ($file in $filesVSIX) {
 }
 #endregion
 
-
+#region de herramientas extras
+# Estas apps fueron comentadas en los *Packages.config dado que no se descargan bien
+downloadReleaseFromGitHub -repo "kimmknight/remoteapptool" -path "$pathAxxon\Tools" -filesToDownload @("RemoteApp.Tool.6100.msi") -filesToExecute @("RemoteApp.Tool.6100.msi")
+curl -o "$pathAxxon\Tools\sizer4_dev640.msi" https://www.brianapps.net/sizer4/sizer4_dev640.msi
+#endregion
