@@ -97,8 +97,6 @@ git clone $repositoryUrl $metadata | Wait-Process
 Write-Host -ForegroundColor Yellow "Deteniendo todos los servicios de D365FO"
 Stop-D365Environment
 
-# Task 2: Create a symbolic link
-
 # Task 1: Listado de modelos
 $modelList = Get-ChildItem -Path $metadata -Directory | Select-Object -ExpandProperty Name | Where { $_ -like "DEV*" }
 $modelList
