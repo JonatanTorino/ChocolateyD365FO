@@ -39,7 +39,7 @@ Stop-D365Environment
 $packagesLocalDirectory = "K:\AosService\PackagesLocalDirectory"
 foreach ($repo in $repositories) {
     foreach ($model in $repo.models) {
-        $targetPath = Join-Path $model.metadataPath -ChildPath $model.modelName
+        $targetPath = $model.metadataPath
         $linkPath = Join-Path $packagesLocalDirectory -ChildPath $model.modelName
         
         Write-Host -ForegroundColor Cyan "Remove existing directory if it exists $linkPath"
@@ -53,9 +53,11 @@ foreach ($repo in $repositories) {
 }
 
 # Task 3: Compile the models
-$modelsToBuild = ($models | ForEach-Object { "`"$_`"" }) -join ','
-Write-Host -ForegroundColor Green "Executing the D365 module compile command: $modelsToBuild"
-Invoke-D365ProcessModule -Module $modelsToBuild -ExecuteCompile
+foreach ($modelItem in $models) {
+    Write-Host -ForegroundColor Green "Executing the D365 module compile command: $modelItem"
+    Invoke-D365ProcessModule -Module $modelItem -ExecuteCompile
+}
+# $modelsToBuild = ($models | ForEach-Object { "`"$_`"" }) -join ','
 
 Write-Host -ForegroundColor Yellow "Iniciando el servicio del AOS de D365FO"
 Start-D365Environment -Aos
