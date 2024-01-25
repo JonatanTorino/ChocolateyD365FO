@@ -34,9 +34,9 @@ Write-Host -ForegroundColor Green "Executing the D365 module compile command: $m
 Invoke-D365ModuleFullCompile -Module $modelName
 
 Write-Host -ForegroundColor Yellow "Iniciando el servicio del AOS de D365FO"
-Start-D365Environment -Aos
+Start-D365EnvironmentV2 -Aos
 Write-Host -ForegroundColor Yellow "Iniciando el servicio del BATCH de D365FO"
-Start-D365Environment -Batch
+Start-D365EnvironmentV2 -Batch
 
 ```
 
@@ -70,9 +70,9 @@ Write-Host -ForegroundColor Green "Executing the D365 module compile command: $m
 Invoke-D365ModuleFullCompile -Module $modelName
 
 Write-Host -ForegroundColor Yellow "Iniciando el servicio del AOS de D365FO"
-Start-D365Environment -Aos
+Start-D365EnvironmentV2 -Aos
 Write-Host -ForegroundColor Yellow "Iniciando el servicio del BATCH de D365FO"
-Start-D365Environment -Batch
+Start-D365EnvironmentV2 -Batch
 
 ```
 
@@ -127,9 +127,9 @@ foreach ($modelName in $modelList) {
     Invoke-D365ModuleFullCompile -Module $modelName
 }
 
-Start-D365Environment -Aos
+Start-D365EnvironmentV2 -Aos
 Write-Host -ForegroundColor Yellow "Iniciando el servicio del AOS de D365FO"
-Start-D365Environment -Batch
+Start-D365EnvironmentV2 -Batch
 Write-Host -ForegroundColor Yellow "Iniciando el servicio del BATCH de D365FO"
 
 ```

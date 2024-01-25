@@ -1,5 +1,6 @@
 # Tomado de ejemplo desde el repositorio https://github.com/TrudAX/TRUDScripts/
 
+
 #region Install tools
 Install-Module -Name SqlServer -AllowClobber
 Install-Module -Name d365fo.tools -AllowClobber
@@ -7,6 +8,11 @@ Add-D365WindowsDefenderRules
 Invoke-D365InstallAzCopy
 #endregion
 
+
+#region backups
+Backup-D365WebConfig 
+Backup-D365DevConfig 
+#enregion
 
 #region Install additional apps using Chocolatey
 If (Test-Path -Path "$env:ProgramData\Chocolatey") {
@@ -48,7 +54,8 @@ $SqlServer.Configuration.Alter()
 Write-Host "Setting web browser homepage to the local environment"
 Get-D365Url | Set-D365StartPage
 Write-Host "Setting Management Reporter to manual startup to reduce churn and Event Log messages"
-Get-D365Environment -FinancialReporter | Set-Service -StartupType Manual
+Stop-D365Environment -FinancialReporter
+Get-D365Environment -FinancialReporter | Set-Service -StartupType Disabled
 Stop-Service -Name MR2012ProcessService -Force
 Set-Service -Name MR2012ProcessService -StartupType Disabled
 Write-Host "Setting Windows Defender rules to speed up compilation time"

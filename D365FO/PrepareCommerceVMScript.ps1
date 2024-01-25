@@ -9,6 +9,14 @@
 }
 
 $repositories += [PSCustomObject]@{
+    repositoryUrl = "https://github.com/JonatanTorino/DevAxCmmUtils"
+    localPath = "K:\Axxon\GitHub.JonatanTorino\DevAxCmmUtils"
+    models = [PSCustomObject[]]@(
+        [PSCustomObject]@{modelName = "DevAxCmmUtils"; metadataPath = "K:\Axxon\GitHub.JonatanTorino\DevAxCmmUtils"}
+    )
+}
+
+$repositories += [PSCustomObject]@{
     repositoryUrl = "https://github.com/arganollc/aotbrowser"
     localPath = "K:\Axxon\GitHub.JonatanTorino\AOTBrowser"
     models = [PSCustomObject[]]@(
@@ -60,6 +68,6 @@ foreach ($modelItem in $models) {
 # $modelsToBuild = ($models | ForEach-Object { "`"$_`"" }) -join ','
 
 Write-Host -ForegroundColor Yellow "Iniciando el servicio del AOS de D365FO"
-Start-D365Environment -Aos
+Start-D365EnvironmentV2 -Aos
 Write-Host -ForegroundColor Yellow "Iniciando el servicio del BATCH de D365FO"
-Start-D365Environment -Batch
+Start-D365EnvironmentV2 -Batch
