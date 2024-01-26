@@ -122,6 +122,9 @@ downloadReleaseFromGitHub -repo "TrudAX/TRUDUtilsD365" -path "$pathForVSIX\TRUDU
 # Debug Attach Manager 2019
 downloadReleaseFromGitHub -repo "karpach/debug-attach-manager" -path $pathForVSIX -filesToDownload @("DebugAttachHistory.vsix")
 
+# Project System Tools 2022 (MSBuild Log)
+curl -o "$pathForVSIX\Microsoft.VisualStudio.ProjectSystem.Tools.vsix" https://visualstudioproductteam.gallerycdn.vsassets.io/extensions/visualstudioproductteam/projectsystemtools2022/1.0.2.2305901/1673266302758/Microsoft.VisualStudio.ProjectSystem.Tools.vsix
+
 # Debug Attach Manager 2022
 curl -o "$pathForVSIX\DebugAttachManager2022.vsix" https://viktarkarpach.gallerycdn.vsassets.io/extensions/viktarkarpach/debugattachmanager2022/2.4.220301.0/1646780693672/DebugAttachHistory.vsix
 
