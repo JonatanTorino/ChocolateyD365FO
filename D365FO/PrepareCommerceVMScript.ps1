@@ -1,14 +1,6 @@
 
 # Task 1: Clone the repository
 [PSCustomObject[]] $repositories = [PSCustomObject]@{
-    repositoryUrl = "https://github.com/JonatanTorino/DevAxCmmRtsLog"
-    localPath = "K:\Axxon\GitHub.JonatanTorino\DevAxCmmRtsLog"
-    models = [PSCustomObject[]]@(
-        [PSCustomObject]@{modelName = "DevAxCmmRtsLog"; metadataPath = "K:\Axxon\GitHub.JonatanTorino\DevAxCmmRtsLog"}
-    )
-}
-
-$repositories += [PSCustomObject]@{
     repositoryUrl = "https://github.com/JonatanTorino/DevAxCmmUtils"
     localPath = "K:\Axxon\GitHub.JonatanTorino\DevAxCmmUtils"
     models = [PSCustomObject[]]@(
