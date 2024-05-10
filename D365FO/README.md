@@ -8,9 +8,9 @@ Copy and past
 Este modelo sirve para tener un registro del intercambio de mensajes entre el RTS y el RetailServer
 ```powershell
 # Task 1: Clone the repository
-$repositoryUrl = "https://github.com/JonatanTorino/DevAxCmmRtsLog"
-$localPath = "K:\Axxon\GitHub.JonatanTorino\DevAxCmmRtsLog"
-$modelName = "DevAxCmmRtsLog"
+$repositoryUrl = "https://github.com/JonatanTorino/DevAxCmmUtils"
+$localPath = "K:\Axxon\GitHub.JonatanTorino\DevAxCmmUtils"
+$modelName = "DevAxCmmUtils"
 
 # Clone the repository
 git clone $repositoryUrl $localPath | Wait-Process
