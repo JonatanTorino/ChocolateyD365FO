@@ -26,11 +26,11 @@ choco install $env:TEMP\JonasPackages.config -y
 
 ##  Instalattion individualy
 ```powershell
-choco install GoogleChrome -y \
-choco install microsoft-edge -y \
-choco install 7zip -y \
-choco install remoteapp -y \
-choco install sizer -y \
-choco install vscode -y \
-choco install notepadplusplus.install -y \
+choco install GoogleChrome -y 
+choco install microsoft-edge -y 
+choco install 7zip -y 
+choco install remoteapp -y 
+choco install sizer -y 
+choco install vscode -y 
+choco install notepadplusplus.install -y 
 ```
