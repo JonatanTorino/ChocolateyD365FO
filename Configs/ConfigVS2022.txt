@@ -1,0 +1,2 @@
+Ruta para cambiar las plantillas de la creación de las clases
+C:\Program Files\Microsoft Visual Studio\2022\Professional\Common7\IDE\ItemTemplates\CSharp\Code\1033\Class
