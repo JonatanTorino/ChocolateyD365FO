@@ -30,8 +30,8 @@ $repositories += [PSCustomObject]@{
     repositoryUrl = "https://github.com/ameyer505/D365FOAdminToolkit"
     localPath = "K:\Axxon\GitHub.JonatanTorino\D365FOAdminToolkit"
     models = [PSCustomObject[]]@(
-        [PSCustomObject]@{modelName = "D365FOAdminToolkit"; metadataPath = "K:\Axxon\GitHub.JonatanTorino\D365FOAdminToolkit\D365FOAdminToolkit"},
-        [PSCustomObject]@{modelName = "D365FOAdminToolkitTest"; metadataPath = "K:\Axxon\GitHub.JonatanTorino\D365FOAdminToolkit\D365FOAdminToolkitTests"}
+        [PSCustomObject]@{modelName = "D365FOAdminToolkit"; metadataPath = "K:\Axxon\GitHub.JonatanTorino\D365FOAdminToolkit\Metadata\D365FOAdminToolkit"},
+        [PSCustomObject]@{modelName = "D365FOAdminToolkitTest"; metadataPath = "K:\Axxon\GitHub.JonatanTorino\D365FOAdminToolkit\Metadata\D365FOAdminToolkitTests"}
     )
 }
 
