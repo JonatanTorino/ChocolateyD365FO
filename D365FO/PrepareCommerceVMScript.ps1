@@ -21,10 +21,21 @@ $repositories += [PSCustomObject]@{
     localPath = "K:\Axxon\GitHub.JonatanTorino\XppTools"
     models = [PSCustomObject[]]@(
         [PSCustomObject]@{modelName = "DEVCommon"; metadataPath = "K:\Axxon\GitHub.JonatanTorino\XppTools\DEVCommon"},
-        [PSCustomObject]@{modelName = "DEVTools"; metadataPath = "K:\Axxon\GitHub.JonatanTorino\XppTools\DEVTools"},
-        [PSCustomObject]@{modelName = "DEVTutorial"; metadataPath = "K:\Axxon\GitHub.JonatanTorino\XppTools\DEVTutorial"}
+        [PSCustomObject]@{modelName = "DEVTools"; metadataPath = "K:\Axxon\GitHub.JonatanTorino\XppTools\DEVTools"}
+        #,[PSCustomObject]@{modelName = "DEVTutorial"; metadataPath = "K:\Axxon\GitHub.JonatanTorino\XppTools\DEVTutorial"}
     )
 }
+
+$repositories += [PSCustomObject]@{
+    repositoryUrl = "https://github.com/ameyer505/D365FOAdminToolkit"
+    localPath = "K:\Axxon\GitHub.JonatanTorino\D365FOAdminToolkit"
+    models = [PSCustomObject[]]@(
+        [PSCustomObject]@{modelName = "D365FOAdminToolkit"; metadataPath = "K:\Axxon\GitHub.JonatanTorino\D365FOAdminToolkit\D365FOAdminToolkit"},
+        [PSCustomObject]@{modelName = "D365FOAdminToolkitTest"; metadataPath = "K:\Axxon\GitHub.JonatanTorino\D365FOAdminToolkit\D365FOAdminToolkitTests"}
+    )
+}
+
+Import-Module d365fo.tools
 
 foreach ($repo in $repositories) {
     # Clone the repository
