@@ -2,37 +2,60 @@
 # Task 1: Clone the repository
 [PSCustomObject[]] $repositories = [PSCustomObject]@{
     repositoryUrl = "https://github.com/JonatanTorino/DevAxCmmUtils"
-    localPath = "K:\Axxon\GitHub.JonatanTorino\DevAxCmmUtils"
-    models = [PSCustomObject[]]@(
-        [PSCustomObject]@{modelName = "DevAxCmmUtils"; metadataPath = "K:\Axxon\GitHub.JonatanTorino\DevAxCmmUtils"}
+    localPath     = "K:\Axxon\GitHub.JonatanTorino\DevAxCmmUtils"
+    models        = [PSCustomObject[]]@(
+        [PSCustomObject]@{modelName = "DevAxCmmUtils"; metadataPath = "K:\Axxon\GitHub.JonatanTorino\DevAxCmmUtils\DevAxCmmUtils" }
+    )
+}
+
+$repositories += [PSCustomObject]@{
+    repositoryUrl = "https://github.com/JonatanTorino/DevAxRefreshData"
+    localPath     = "K:\Axxon\GitHub.JonatanTorino\DevAxRefreshData"
+    models        = [PSCustomObject[]]@(
+        [PSCustomObject]@{modelName = "DevAxRefreshData"; metadataPath = "K:\Axxon\Github.JonatanTorino\DevAxRefreshData\DevAxRefreshData" }
     )
 }
 
 $repositories += [PSCustomObject]@{
     repositoryUrl = "https://github.com/arganollc/aotbrowser"
-    localPath = "K:\Axxon\GitHub.JonatanTorino\AOTBrowser"
-    models = [PSCustomObject[]]@(
-        [PSCustomObject]@{modelName = "AOTBrowser"; metadataPath = "K:\Axxon\Github.JonatanTorino\AOTBrowser\Metadata\AOTBrowser"}
+    localPath     = "K:\Axxon\GitHub.JonatanTorino\AOTBrowser"
+    models        = [PSCustomObject[]]@(
+        [PSCustomObject]@{modelName = "AOTBrowser"; metadataPath = "K:\Axxon\Github.JonatanTorino\AOTBrowser\Metadata\AOTBrowser" }
     )
 }
 
 $repositories += [PSCustomObject]@{
     repositoryUrl = "https://github.com/TrudAX/XppTools"
-    localPath = "K:\Axxon\GitHub.JonatanTorino\XppTools"
-    models = [PSCustomObject[]]@(
-        [PSCustomObject]@{modelName = "DEVCommon"; metadataPath = "K:\Axxon\GitHub.JonatanTorino\XppTools\DEVCommon"},
-        [PSCustomObject]@{modelName = "DEVTools"; metadataPath = "K:\Axxon\GitHub.JonatanTorino\XppTools\DEVTools"}
+    localPath     = "K:\Axxon\GitHub.JonatanTorino\XppTools"
+    models        = [PSCustomObject[]]@(
+        [PSCustomObject]@{modelName = "DEVCommon"; metadataPath = "K:\Axxon\GitHub.JonatanTorino\XppTools\DEVCommon" },
+        [PSCustomObject]@{modelName = "DEVTools"; metadataPath = "K:\Axxon\GitHub.JonatanTorino\XppTools\DEVTools" }
         #,[PSCustomObject]@{modelName = "DEVTutorial"; metadataPath = "K:\Axxon\GitHub.JonatanTorino\XppTools\DEVTutorial"}
     )
 }
 
 $repositories += [PSCustomObject]@{
     repositoryUrl = "https://github.com/ameyer505/D365FOAdminToolkit"
-    localPath = "K:\Axxon\GitHub.JonatanTorino\D365FOAdminToolkit"
-    models = [PSCustomObject[]]@(
-        [PSCustomObject]@{modelName = "D365FOAdminToolkit"; metadataPath = "K:\Axxon\GitHub.JonatanTorino\D365FOAdminToolkit\Metadata\D365FOAdminToolkit"},
-        [PSCustomObject]@{modelName = "D365FOAdminToolkitTest"; metadataPath = "K:\Axxon\GitHub.JonatanTorino\D365FOAdminToolkit\Metadata\D365FOAdminToolkitTests"}
+    localPath     = "K:\Axxon\GitHub.JonatanTorino\D365FOAdminToolkit"
+    models        = [PSCustomObject[]]@(
+        [PSCustomObject]@{modelName = "D365FOAdminToolkit"; metadataPath = "K:\Axxon\GitHub.JonatanTorino\D365FOAdminToolkit\Metadata\D365FOAdminToolkit" },
+        [PSCustomObject]@{modelName = "D365FOAdminToolkitTest"; metadataPath = "K:\Axxon\GitHub.JonatanTorino\D365FOAdminToolkit\Metadata\D365FOAdminToolkitTests" }
     )
+}
+
+$repositories += [PSCustomObject]@{
+    repositoryUrl = "https://github.com/JonatanTorino/MyPowerShellScripts"
+    localPath     = "K:\Axxon\GitHub.JonatanTorino\MyPowerShellScripts"
+}
+
+$repositories += [PSCustomObject]@{
+    repositoryUrl = "https://github.com/JonatanTorino/CommerceStoreScaleUnitSetupInstaller"
+    localPath     = "K:\Axxon\GitHub.JonatanTorino\CommerceStoreScaleUnitSetupInstaller"
+}
+
+$repositories += [PSCustomObject]@{
+    repositoryUrl = "https://github.com/JonatanTorino/CodeSnippets"
+    localPath     = "K:\Axxon\GitHub.JonatanTorino\CodeSnippets"
 }
 
 Import-Module d365fo.tools
@@ -54,7 +77,7 @@ foreach ($repo in $repositories) {
         $linkPath = Join-Path $packagesLocalDirectory -ChildPath $model.modelName
         
         Write-Host -ForegroundColor Cyan "Remove existing directory if it exists $linkPath"
-        cmd /c rmdir /q /s $linkPath
+        Remove-Item -Path $linkPath -Recurse -Force
         
         Write-Host -ForegroundColor Cyan "Create a symbolic link to $targetPath"
         New-Item -ItemType SymbolicLink -Path $linkPath -Target $targetPath

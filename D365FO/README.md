@@ -24,7 +24,7 @@ $targetPath = Join-Path $localPath -ChildPath $modelName
 $linkPath = Join-Path $packagesLocalDirectory -ChildPath $modelName
 
 Write-Host -ForegroundColor Cyan "Remove existing directory if it exists $linkPath"
-cmd /c rmdir /q /s $linkPath
+Remove-Item -Path $linkPath -Recurse -Force
 
 Write-Host -ForegroundColor Cyan "Create a symbolic link to $target<Path"
 New-Item -ItemType SymbolicLink -Path $linkPath -Target $targetPath
@@ -74,7 +74,7 @@ foreach ($modelName in $modelList) {
     $linkPath = Join-Path $packagesLocalDirectory -ChildPath $modelName
     
     Write-Host -ForegroundColor Cyan "Remove existing directory if it exists $linkPath"
-    cmd /c rmdir /q /s $linkPath
+    Remove-Item -Path $linkPath -Recurse -Force
 
     Write-Host -ForegroundColor Cyan "Create a symbolic link to $targetPath"
     Write-Host
@@ -119,7 +119,7 @@ $targetPath = Join-Path $localPath -ChildPath "Metadata\$modelName"
 $linkPath = Join-Path $packagesLocalDirectory -ChildPath $modelName
 
 Write-Host -ForegroundColor Cyan "Remove existing directory if it exists $linkPath"
-cmd /c rmdir /q /s $linkPath
+Remove-Item -Path $linkPath -Recurse -Force
 
 Write-Host -ForegroundColor Cyan "Create a symbolic link to $targetPath"
 New-Item -ItemType SymbolicLink -Path $linkPath -Target $targetPath
