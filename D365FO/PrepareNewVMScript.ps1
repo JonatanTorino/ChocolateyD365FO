@@ -6,6 +6,8 @@ Install-Module -Name SqlServer -AllowClobber
 Install-Module -Name d365fo.tools -AllowClobber
 Add-D365WindowsDefenderRules
 Invoke-D365InstallAzCopy
+Invoke-D365InstallSqlPackage -url "https://go.microsoft.com/fwlink/?linkid=2316204"
+#Copy C:\Program Files\Microsoft SQL Server\170\DAC\bin to C:\Temp\d365fo.tools\SqlPackage
 #endregion
 
 
@@ -53,12 +55,17 @@ $SqlServer.Configuration.Alter()
 #region Disable services
 Write-Host "Setting web browser homepage to the local environment"
 Get-D365Url | Set-D365StartPage
+
 Write-Host "Setting Management Reporter to manual startup to reduce churn and Event Log messages"
 Stop-D365Environment -FinancialReporter
 Get-D365Environment -FinancialReporter | Set-Service -StartupType Disabled
+Stop-Service -Name MR2012ProcessService -Force
+Set-Service -Name MR2012ProcessService -StartupType Disabled
+
 Write-Host "Setting DMF manual startup to reduce churn and Event Log messages"
 Stop-D365Environment -DMF
 Get-D365Environment -DMF | Set-Service -StartupType Disabled
+
 Write-Host "Setting Windows Defender rules to speed up compilation time"
 Add-D365WindowsDefenderRules -Silent
 #endregion
@@ -74,7 +81,9 @@ if (test-path "$env:servicedrive\AOSService\PackagesLocalDirectory\bin\DynamicsD
         write-host 'RuntimeHostType set "IIS" in DynamicsDevConfig.xml' -ForegroundColor Green
     }#end if IIS check
 }#end if test-path xml file
-else { write-host 'AOSService drive not found! Could not set RuntimeHostType to "IIS"' -ForegroundColor red }
+else { 
+    write-host 'AOSService drive not found! Could not set RuntimeHostType to "IIS"' -ForegroundColor red 
+}
 #endregion
 
 
@@ -118,10 +127,7 @@ Function downloadReleaseFromGitHub {
 # TrudUtilsD365 2022
 $pathAxxon = "K:\Axxon"
 $pathForVSIX = "$pathAxxon\VSExtensions"
-downloadReleaseFromGitHub -repo "TrudAX/TRUDUtilsD365" -path "$pathForVSIX\TRUDUtilsD365" -filesToDownload @("InstallToVS.exe", "TRUDUtilsD365.dll", "TRUDUtilsD365.pdb") -filesToExecute @("InstallToVS.exe")
-
-# Debug Attach Manager 2019
-downloadReleaseFromGitHub -repo "karpach/debug-attach-manager" -path $pathForVSIX -filesToDownload @("DebugAttachHistory.vsix")
+# downloadReleaseFromGitHub -repo "TrudAX/TRUDUtilsD365" -path "$pathForVSIX\TRUDUtilsD365" -filesToDownload @("InstallToVS.exe", "TRUDUtilsD365.dll", "TRUDUtilsD365.pdb") -filesToExecute @("InstallToVS.exe")
 
 # Project System Tools 2022 (MSBuild Log)
 curl -o "$pathForVSIX\Microsoft.VisualStudio.ProjectSystem.Tools.vsix" https://visualstudioproductteam.gallerycdn.vsassets.io/extensions/visualstudioproductteam/projectsystemtools2022/1.0.2.2305901/1673266302758/Microsoft.VisualStudio.ProjectSystem.Tools.vsix
@@ -131,9 +137,6 @@ curl -o "$pathForVSIX\DebugAttachManager2022.vsix" https://viktarkarpach.gallery
 
 # ExtensionManager 2022
 curl -o "$pathForVSIX\ExtensionManager2022.vsix" https://loop8ack.gallerycdn.vsassets.io/extensions/loop8ack/extensionmanager2022/1.2.180/1702761415816/ExtensionManager2022.vsix
-
-# ExtensionManager 2022
-curl -o "$pathForVSIX\ExtensionManager2019.vsix" https://madskristensen.gallerycdn.vsassets.io/extensions/madskristensen/extensionmanager2019/1.1.82/1624393592068/Extension_Manager_2019_v1.1.82.vsix
 
 $filesVSIX = Get-ChildItem -Path $pathForVSIX -Filter *.vsix
 foreach ($file in $filesVSIX) {
