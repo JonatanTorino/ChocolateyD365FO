@@ -1,36 +1,34 @@
-# Tomado de ejemplo desde el repositorio https://github.com/TrudAX/TRUDScripts/
+# VM preparation script for Dynamics 365 FO
+# Based on https://github.com/TrudAX/TRUDScripts/
 
-
-#region Install tools
+#region Install main tools
 Install-Module -Name SqlServer -AllowClobber
 Install-Module -Name d365fo.tools -AllowClobber
 Add-D365WindowsDefenderRules
 Invoke-D365InstallAzCopy
 Invoke-D365InstallSqlPackage -url "https://go.microsoft.com/fwlink/?linkid=2316204"
-#Copy C:\Program Files\Microsoft SQL Server\170\DAC\bin to C:\Temp\d365fo.tools\SqlPackage
+# Copy C:\Program Files\Microsoft SQL Server\170\DAC\bin to C:\Temp\d365fo.tools\SqlPackage if needed
 #endregion
 
-
-#region backups
+#region Backup configuration
 Backup-D365WebConfig 
 Backup-D365DevConfig 
-#enregion
+#endregion
 
-#region Install additional apps using Chocolatey
-If (Test-Path -Path "$env:ProgramData\Chocolatey") {
+#region Install additional applications using Chocolatey
+if (Test-Path -Path "$env:ProgramData\Chocolatey") {
     choco upgrade chocolatey -y
     choco upgrade all --ignore-checksums -y
-}
-Else {
-    Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
+} else {
+    Set-ExecutionPolicy Bypass -Scope Process -Force
+    [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072
+    iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
     choco install curl -y
 
     curl -o $env:TEMP\DefaultPackages.config https://raw.githubusercontent.com/JonatanTorino/ChocolateyD365FO/main/DefaultPackages.config
-
     choco install $env:TEMP\DefaultPackages.config -y
 
     curl -o $env:TEMP\JonasPackages.config https://raw.githubusercontent.com/JonatanTorino/ChocolateyD365FO/main/JonasPackages.config
-
     choco install $env:TEMP\JonasPackages.config -y
 
     choco install Nuget.CommandLine
@@ -38,114 +36,111 @@ Else {
 }
 #endregion
 
-
-#region ChangeSQLServer
+#region SQL Server configuration
 Import-Module SqlServer
-# Create a Server object for the default instance
+# Create server object for default instance
 $SqlServer = New-Object Microsoft.SqlServer.Management.Smo.Server "."
-# Set the maximum server memory to 5000 MB
+# Limit max server memory to 5000 MB
 $SqlServer.Configuration.MaxServerMemory.ConfigValue = 5000
-# Set the "Compress Backup" option to true
+# Enable backup compression
 $SqlServer.Configuration.DefaultBackupCompression.ConfigValue = 1
-# Save the changes
+# Save changes
 $SqlServer.Configuration.Alter()
 #endregion
 
-
-#region Disable services
+#region Disable unnecessary services
 Write-Host "Setting web browser homepage to the local environment"
 Get-D365Url | Set-D365StartPage
 
-Write-Host "Setting Management Reporter to manual startup to reduce churn and Event Log messages"
+Write-Host "Setting Management Reporter to manual startup"
 Stop-D365Environment -FinancialReporter
 Get-D365Environment -FinancialReporter | Set-Service -StartupType Disabled
 Stop-Service -Name MR2012ProcessService -Force
 Set-Service -Name MR2012ProcessService -StartupType Disabled
 
-Write-Host "Setting DMF manual startup to reduce churn and Event Log messages"
+Write-Host "Setting DMF to manual startup"
 Stop-D365Environment -DMF
 Get-D365Environment -DMF | Set-Service -StartupType Disabled
 
-Write-Host "Setting Windows Defender rules to speed up compilation time"
+Write-Host "Adding Windows Defender rules to speed up compilation"
 Add-D365WindowsDefenderRules -Silent
 #endregion
 
-
-#region ChangeIIS Express for IIS
-if (test-path "$env:servicedrive\AOSService\PackagesLocalDirectory\bin\DynamicsDevConfig.xml") {
+#region Switch from IIS Express to IIS
+if (Test-Path "$env:servicedrive\AOSService\PackagesLocalDirectory\bin\DynamicsDevConfig.xml") {
     [xml]$xmlDoc = Get-Content "$env:servicedrive\AOSService\PackagesLocalDirectory\bin\DynamicsDevConfig.xml"
     if ($xmlDoc.DynamicsDevConfig.RuntimeHostType -ne "IIS") {
-        write-host 'Setting RuntimeHostType to "IIS" in DynamicsDevConfig.xml' -ForegroundColor yellow
+        Write-Host 'Changing RuntimeHostType to "IIS" in DynamicsDevConfig.xml' -ForegroundColor yellow
         $xmlDoc.DynamicsDevConfig.RuntimeHostType = "IIS"
         $xmlDoc.Save("$env:servicedrive\AOSService\PackagesLocalDirectory\bin\DynamicsDevConfig.xml")
-        write-host 'RuntimeHostType set "IIS" in DynamicsDevConfig.xml' -ForegroundColor Green
-    }#end if IIS check
-}#end if test-path xml file
-else { 
-    write-host 'AOSService drive not found! Could not set RuntimeHostType to "IIS"' -ForegroundColor red 
-}
-#endregion
-
-
-#region Download from Github
-Function downloadReleaseFromGitHub {
-    Param(
-        [Parameter(Mandatory = $true)][string]$repo,
-        [Parameter(Mandatory = $true)][string]$path,
-        [Parameter(Mandatory = $true)][string[]]$filesToDownload,
-        [string[]]$filesToExecute
-    )
-    Process {
-        $releases = "https://api.github.com/repos/$repo/releases"
-
-        If (!(test-path $path)) {
-            New-Item -ItemType Directory -Force -Path $path
-        }
-        cd $path
-        
-        Write-Host Determining latest release
-        [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
-        $tag = (Invoke-WebRequest -Uri $releases -UseBasicParsing | ConvertFrom-Json)[0].tag_name
-
-        Write-Host Downloading files
-        foreach ($file in $filesToDownload) {
-            $download = "https://github.com/$repo/releases/download/$tag/$file"
-            [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
-            Invoke-WebRequest $download -Out $file
-            Unblock-File $file
-        }
-
-        foreach ($file in $filesToExecute) {
-            Start-Process -FilePath $file
-        }
+        Write-Host 'RuntimeHostType changed to "IIS" in DynamicsDevConfig.xml' -ForegroundColor Green
     }
+} else { 
+    Write-Host 'AOSService drive not found! Could not change RuntimeHostType to "IIS"' -ForegroundColor red 
 }
 #endregion
 
+# Enable IIS preload
+Enable-D365IISPreload
 
-#region Install extensions para VisualStudio
+#region Load support scripts
+if ([string]::IsNullOrWhiteSpace($PSScriptRoot)) {
+    $PSScriptRoot = "."
+}
+. "$PSScriptRoot\DownloadFromGitHub.ps1"
+. "$PSScriptRoot\AddAddInPath.ps1"
+. "$PSScriptRoot\Invoke-VSInstallExtension.ps1"
+#endregion
+
+#region Install Visual Studio extensions D365FO
 # TrudUtilsD365 2022
 $pathAxxon = "K:\Axxon"
 $pathForVSIX = "$pathAxxon\VSExtensions"
-# downloadReleaseFromGitHub -repo "TrudAX/TRUDUtilsD365" -path "$pathForVSIX\TRUDUtilsD365" -filesToDownload @("InstallToVS.exe", "TRUDUtilsD365.dll", "TRUDUtilsD365.pdb") -filesToExecute @("InstallToVS.exe")
+downloadReleaseFromGitHub -repo "TrudAX/TRUDUtilsD365" -path "$pathForVSIX\TRUDUtilsD365"
+Add-AddInPathToDynamicsDevConfig -AddInPath "$pathForVSIX\TRUDUtilsD365"
 
-# Project System Tools 2022 (MSBuild Log)
-curl -o "$pathForVSIX\Microsoft.VisualStudio.ProjectSystem.Tools.vsix" https://visualstudioproductteam.gallerycdn.vsassets.io/extensions/visualstudioproductteam/projectsystemtools2022/1.0.2.2305901/1673266302758/Microsoft.VisualStudio.ProjectSystem.Tools.vsix
+if (!(Test-Path $pathForVSIX\HichemDax)) {
+    New-Item -ItemType Directory -Force -Path $pathForVSIX\HichemDax
+}
+curl -o "$pathForVSIX\HichemDax\D365FONinjaDevTools.dll" https://github.com/HichemDax/D365FONinjaDevTools/blob/master/D365FONinjaDevTools_Package/D365FONinjaDevTools.dll
+Add-AddInPathToDynamicsDevConfig -AddInPath "$pathForVSIX\HichemDax"
+#endregion
 
-# Debug Attach Manager 2022
-curl -o "$pathForVSIX\DebugAttachManager2022.vsix" https://viktarkarpach.gallerycdn.vsassets.io/extensions/viktarkarpach/debugattachmanager2022/2.4.220301.0/1646780693672/DebugAttachHistory.vsix
+#region Install Visual Studio extensions D365FO
+Invoke-VSInstallExtension -Version 2022 -PackageName 'cpmcgrath.Codealignment'
+Invoke-VSInstallExtension -Version 2022 -PackageName 'EWoodruff.VisualStudioSpellCheckerVS2022andLater'
+Invoke-VSInstallExtension -Version 2022 -PackageName 'MadsKristensen.OpeninVisualStudioCode'
+Invoke-VSInstallExtension -Version 2022 -PackageName 'MadsKristensen.TrailingWhitespace64'
+Invoke-VSInstallExtension -Version 2022 -PackageName 'VisualStudioProductTeam.ProjectSystemTools2022'
+Invoke-VSInstallExtension -Version 2022 -PackageName 'ViktarKarpach.DebugAttachManager2022'
+Invoke-VSInstallExtension -Version 2022 -PackageName 'Loop8ack.ExtensionManager2022'
+#endregion
 
-# ExtensionManager 2022
-curl -o "$pathForVSIX\ExtensionManager2022.vsix" https://loop8ack.gallerycdn.vsassets.io/extensions/loop8ack/extensionmanager2022/1.2.180/1702761415816/ExtensionManager2022.vsix
+#region vscode extensions
+$vsCodeExtensions = @(
+    "alexk.vscode-xpp"
+    # "adamwalzer.string-converter"
+    ,"DotJoshJohnson.xml"
+    # ,"IBM.output-colorizer"
+    # ,"mechatroner.rainbow-csv"
+    ,"ms-mssql.mssql"
+    ,"ms-vscode.PowerShell"
+    ,"tylerleonhardt.vscode-inline-values-powershell"
+    ,"piotrgredowski.poor-mans-t-sql-formatter-pg"
+    ,"streetsidesoftware.code-spell-checker"
+    ,"ZainChen.json"
+)
 
-$filesVSIX = Get-ChildItem -Path $pathForVSIX -Filter *.vsix
-foreach ($file in $filesVSIX) {
-    Start-Process -FilePath $file -Wait
+$vsCodeExtensions | ForEach-Object {
+    code --install-extension $_
 }
 #endregion
 
-#region de herramientas extras
-# Estas apps fueron comentadas en los *Packages.config dado que no se descargan bien
-downloadReleaseFromGitHub -repo "kimmknight/remoteapptool" -path "$pathAxxon\Tools" -filesToDownload @("RemoteApp.Tool.6100.msi") -filesToExecute @("RemoteApp.Tool.6100.msi")
+#region Additional tools
+# These applications were commented out in *Packages.config because they do not download correctly
+downloadReleaseFromGitHub -repo "kimmknight/remoteapptool" -path "$pathAxxon\Tools" `
+    -filesToDownload @("RemoteApp.Tool.6100.msi") `
+    -filesToExecute @("RemoteApp.Tool.6100.msi")
+
 curl -o "$pathAxxon\Tools\sizer4_dev640.msi" https://www.brianapps.net/sizer4/sizer4_dev640.msi
 #endregion
