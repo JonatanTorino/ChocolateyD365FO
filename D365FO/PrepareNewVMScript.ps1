@@ -104,6 +104,10 @@ if (!(Test-Path $pathForVSIX\HichemDax)) {
 }
 curl -o "$pathForVSIX\HichemDax\D365FONinjaDevTools.dll" https://github.com/HichemDax/D365FONinjaDevTools/blob/master/D365FONinjaDevTools_Package/D365FONinjaDevTools.dll
 Add-AddInPathToDynamicsDevConfig -AddInPath "$pathForVSIX\HichemDax"
+
+downloadReleaseFromGitHub -repo "noakesey/d365fo-entity-schema" -path "$pathForVSIX\d365fo-entity-schema" -filesToDownload @("Waywo.DbSchema.AddIn.dll")
+Add-AddInPathToDynamicsDevConfig -AddInPath "$pathForVSIX\d365fo-entity-schema"
+
 #endregion
 
 #region Install Visual Studio extensions D365FO

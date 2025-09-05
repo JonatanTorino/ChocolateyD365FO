@@ -30,7 +30,7 @@ choco install GoogleChrome -y
 choco install microsoft-edge -y 
 choco install 7zip -y 
 choco install remoteapp -y 
-choco install sizer -y 
+choco install wiztree -y 
 choco install vscode -y 
 choco install notepadplusplus.install -y 
 ```
