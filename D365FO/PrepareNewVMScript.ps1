@@ -83,13 +83,13 @@ if (Test-Path "$env:servicedrive\AOSService\PackagesLocalDirectory\bin\DynamicsD
 # Enable IIS preload
 Enable-D365IISPreload
 
-#region Load support scripts
-if ([string]::IsNullOrWhiteSpace($PSScriptRoot)) {
-    $PSScriptRoot = "."
-}
-. "$PSScriptRoot\DownloadFromGitHub.ps1"
-. "$PSScriptRoot\AddAddInPath.ps1"
-. "$PSScriptRoot\Invoke-VSInstallExtension.ps1"
+# #region Load support scripts
+# if ([string]::IsNullOrWhiteSpace($PSScriptRoot)) {
+#     $PSScriptRoot = (Get-Location).Path
+# }
+. ".\DownloadFromGitHub.ps1"
+. ".\AddAddInPath.ps1"
+. ".\Invoke-VSInstallExtension.ps1"
 #endregion
 
 #region Install Visual Studio extensions D365FO
@@ -107,6 +107,9 @@ Add-AddInPathToDynamicsDevConfig -AddInPath "$pathForVSIX\HichemDax"
 
 downloadReleaseFromGitHub -repo "noakesey/d365fo-entity-schema" -path "$pathForVSIX\d365fo-entity-schema" -filesToDownload @("Waywo.DbSchema.AddIn.dll")
 Add-AddInPathToDynamicsDevConfig -AddInPath "$pathForVSIX\d365fo-entity-schema"
+
+downloadReleaseFromGitHub -repo "shashisadasivan/SSD365VSAddIn" -path "$pathForVSIX\SSD365VSAddIn"
+Add-AddInPathToDynamicsDevConfig -AddInPath "$pathForVSIX\SSD365VSAddIn"
 
 #endregion
 
