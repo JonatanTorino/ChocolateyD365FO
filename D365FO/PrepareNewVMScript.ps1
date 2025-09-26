@@ -6,7 +6,7 @@ Install-Module -Name SqlServer -AllowClobber
 Install-Module -Name d365fo.tools -AllowClobber
 Add-D365WindowsDefenderRules
 Invoke-D365InstallAzCopy
-Invoke-D365InstallSqlPackage -url "https://go.microsoft.com/fwlink/?linkid=2316204"
+Invoke-D365InstallSqlPackage # -url "https://go.microsoft.com/fwlink/?linkid=2316204"
 # Copy C:\Program Files\Microsoft SQL Server\170\DAC\bin to C:\Temp\d365fo.tools\SqlPackage if needed
 #endregion
 
@@ -88,32 +88,29 @@ Enable-D365IISPreload
 #     $PSScriptRoot = (Get-Location).Path
 # }
 . ".\DownloadFromGitHub.ps1"
-. ".\AddAddInPath.ps1"
+. ".\Add-D365FOExtension.ps1"
 . ".\Invoke-VSInstallExtension.ps1"
 #endregion
 
 #region Install Visual Studio extensions D365FO
-# TrudUtilsD365 2022
 $pathAxxon = "K:\Axxon"
-$pathForVSIX = "$pathAxxon\VSExtensions"
+$pathForVSIX = "$pathAxxon\D365foVSExtensions"
+
 downloadReleaseFromGitHub -repo "TrudAX/TRUDUtilsD365" -path "$pathForVSIX\TRUDUtilsD365"
-Add-AddInPathToDynamicsDevConfig -AddInPath "$pathForVSIX\TRUDUtilsD365"
+Add-ExtensionToDynamicsDevConfig -AddInPath "$pathForVSIX\TRUDUtilsD365"
 
-if (!(Test-Path $pathForVSIX\HichemDax)) {
-    New-Item -ItemType Directory -Force -Path $pathForVSIX\HichemDax
-}
-curl -o "$pathForVSIX\HichemDax\D365FONinjaDevTools.dll" https://github.com/HichemDax/D365FONinjaDevTools/blob/master/D365FONinjaDevTools_Package/D365FONinjaDevTools.dll
-Add-AddInPathToDynamicsDevConfig -AddInPath "$pathForVSIX\HichemDax"
+downloadReleaseFromGitHub -repo "HichemDax\D365FONinjaDevTools" -path "$pathForVSIX\D365FONinjaDevTools"
+Add-ExtensionToDynamicsDevConfig -AddInPath "$pathForVSIX\HichemDax"
 
-downloadReleaseFromGitHub -repo "noakesey/d365fo-entity-schema" -path "$pathForVSIX\d365fo-entity-schema" -filesToDownload @("Waywo.DbSchema.AddIn.dll")
-Add-AddInPathToDynamicsDevConfig -AddInPath "$pathForVSIX\d365fo-entity-schema"
+downloadReleaseFromGitHub -repo "noakesey/d365fo-entity-schema" -path "$pathForVSIX\d365fo-entity-schema"
+Add-ExtensionToDynamicsDevConfig -AddInPath "$pathForVSIX\d365fo-entity-schema"
 
 downloadReleaseFromGitHub -repo "shashisadasivan/SSD365VSAddIn" -path "$pathForVSIX\SSD365VSAddIn"
-Add-AddInPathToDynamicsDevConfig -AddInPath "$pathForVSIX\SSD365VSAddIn"
+Add-ExtensionToDynamicsDevConfig -AddInPath "$pathForVSIX\SSD365VSAddIn"
 
 #endregion
 
-#region Install Visual Studio extensions D365FO
+#region Install Visual Studio extensions
 Invoke-VSInstallExtension -Version 2022 -PackageName 'cpmcgrath.Codealignment'
 Invoke-VSInstallExtension -Version 2022 -PackageName 'EWoodruff.VisualStudioSpellCheckerVS2022andLater'
 Invoke-VSInstallExtension -Version 2022 -PackageName 'MadsKristensen.OpeninVisualStudioCode'
@@ -123,19 +120,61 @@ Invoke-VSInstallExtension -Version 2022 -PackageName 'ViktarKarpach.DebugAttachM
 Invoke-VSInstallExtension -Version 2022 -PackageName 'Loop8ack.ExtensionManager2022'
 #endregion
 
-#region vscode extensions
+#region Install vscode extensions
 $vsCodeExtensions = @(
     "alexk.vscode-xpp"
-    # "adamwalzer.string-converter"
+    ,"mhutchie.git-graph"
+
+    #Style
+    ,"alefragnani.bookmarks"
+    ,"johnpapa.vscode-peacock"
+    ,"wayou.vscode-todo-highlight"
+    ,"gruntfuggly.todo-tree"
+    ,"oderwat.indent-rainbow"
+    ,"pkief.material-icon-theme"
+
+    #JSON/XML
+    ,"ZainChen.json"
     ,"DotJoshJohnson.xml"
-    # ,"IBM.output-colorizer"
-    # ,"mechatroner.rainbow-csv"
-    ,"ms-mssql.mssql"
+    ,"meezilla.json"
+
+    #PowerShell
     ,"ms-vscode.PowerShell"
     ,"tylerleonhardt.vscode-inline-values-powershell"
+    
+    #DBML
+    ,"bocovo.dbml-erd-visualizer"
+    ,"rizkykurniawan.dbml-previewer"
+    ,"matt-meyers.vscode-dbml"
+
+    #Database
+    ,"ms-mssql.mssql"
     ,"piotrgredowski.poor-mans-t-sql-formatter-pg"
-    ,"streetsidesoftware.code-spell-checker"
-    ,"ZainChen.json"
+
+    #Markdown
+    ,"yzhang.markdown-all-in-one"
+    ,"shd101wyy.markdown-preview-enhanced"
+    ,"takumii.markdowntable"
+    ,"davidanson.vscode-markdownlint"
+    ,"bpruitt-goddard.mermaid-markdown-syntax-highlighting"
+    ,"csholmq.excel-to-markdown-table"
+    ,"bierner.github-markdown-preview"
+
+    #UML
+    ,"jebbs.plantuml"
+    ,"claudineyqr.plantuml-snippets"
+    ,"hediet.vscode-drawio"
+    ,"ms-vscode.copilot-mermaid-diagram"
+
+    #REST Client
+    ,"humao.rest-client"
+
+    #AI
+    ,"rooveterinaryinc.roo-cline"
+
+    #CSV
+    ,"phplasma.csv-to-table"
+    ,"mechatroner.rainbow-csv"
 )
 
 $vsCodeExtensions | ForEach-Object {

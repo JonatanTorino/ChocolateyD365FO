@@ -1,4 +1,4 @@
-function Add-AddInPathToDynamicsDevConfig {
+function Add-ExtensionToDynamicsDevConfig {
     param(
         [Parameter(Mandatory = $true)][string]$AddInPath,
         [string]$XmlPath = "$env:USERPROFILE\Documents\Visual Studio Dynamics 365\DynamicsDevConfig.xml"
