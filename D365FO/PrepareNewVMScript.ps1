@@ -199,4 +199,5 @@ downloadReleaseFromGitHub -repo "kimmknight/remoteapptool" -path "$pathAxxon\Too
     -filesToExecute @("RemoteApp.Tool.6100.msi")
 
 curl -o "$pathAxxon\Tools\sizer4_dev640.msi" https://www.brianapps.net/sizer4/sizer4_dev640.msi
+Start-Process -FilePath "$pathAxxon\Tools\sizer4_dev640.msi" -ArgumentList '/quiet' -Wait
 #endregion
