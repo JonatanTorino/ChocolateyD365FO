@@ -34,9 +34,11 @@ if (Test-Path -Path "$env:ProgramData\Chocolatey") {
 #endregion
 
 #region Install extensions for Visual Studio D365FO
+Push-Location 
+
 . ".\DownloadFromGitHub.ps1"
 . ".\Add-D365FOExtension.ps1"
-$pathAxxon = "K:\Axxon"
+$pathAxxon = "C:\Axxon"
 $pathForVSIX = "$pathAxxon\D365foVSExtensions"
 
 downloadReleaseFromGitHub -repo "TrudAX/TRUDUtilsD365" -path "$pathForVSIX\TRUDUtilsD365"
@@ -50,6 +52,8 @@ Add-ExtensionToDynamicsDevConfig -AddInPath "$pathForVSIX\d365fo-entity-schema"
 
 downloadReleaseFromGitHub -repo "shashisadasivan/SSD365VSAddIn" -path "$pathForVSIX\SSD365VSAddIn"
 Add-ExtensionToDynamicsDevConfig -AddInPath "$pathForVSIX\SSD365VSAddIn"
+
+Pop-Location
 #endregion
 
 #region Install Visual Studio extensions
@@ -139,11 +143,6 @@ $vsCodeExtensions | ForEach-Object {
 
 #region Additional tools
 . ".\DownloadFromGitHub.ps1"
-# These applications were commented out in *Packages.config because they do not download correctly
-downloadReleaseFromGitHub -repo "kimmknight/remoteapptool" -path "$pathAxxon\Tools" `
-    -filesToDownload @("RemoteApp.Tool.6100.msi") `
-    -filesToExecute @("RemoteApp.Tool.6100.msi")
-
 curl -o "$pathAxxon\Tools\sizer4_dev640.msi" https://www.brianapps.net/sizer4/sizer4_dev640.msi
 Start-Process -FilePath "$pathAxxon\Tools\sizer4_dev640.msi" -ArgumentList '/quiet' -Wait
 #endregion

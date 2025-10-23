@@ -1,7 +1,7 @@
 function Add-ExtensionToDynamicsDevConfig {
     param(
         [Parameter(Mandatory = $true)][string]$AddInPath,
-        [string]$XmlPath = "$env:USERPROFILE\Documents\Visual Studio Dynamics 365\DynamicsDevConfig.xml"
+        [string]$XmlPath = [System.Environment]::GetFolderPath([System.Environment+SpecialFolder]::Personal) + "\Visual Studio Dynamics 365\DynamicsDevConfig.xml"
     )
     # Check if the XML file exists
     if (Test-Path $XmlPath) {
@@ -10,7 +10,7 @@ function Add-ExtensionToDynamicsDevConfig {
         $nsMgr.AddNamespace("d", "http://schemas.microsoft.com/dynamics/2012/03/development/configuration")
         $nsMgr.AddNamespace("d2p1", "http://schemas.microsoft.com/2003/10/Serialization/Arrays")
         $addInPathsNode = $xmlDoc.SelectSingleNode("//d:AddInPaths", $nsMgr)
-        if ($addInPathsNode -ne $null) {
+        if ($null -ne $addInPathsNode) {
             # Create and add the new node with the received path
             $newElem = $xmlDoc.CreateElement("d2p1:string", "http://schemas.microsoft.com/2003/10/Serialization/Arrays")
             $newElem.InnerText = $AddInPath

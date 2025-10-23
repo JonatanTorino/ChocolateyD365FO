@@ -63,3 +63,12 @@ if (Test-Path "$env:servicedrive\AOSService\PackagesLocalDirectory\bin\DynamicsD
 Enable-D365IISPreload
 
 .\PrepareNew-CommonEnvironment.ps1
+
+
+#region Additional tools
+. ".\DownloadFromGitHub.ps1"
+# These applications were commented out in *Packages.config because they do not download correctly
+downloadReleaseFromGitHub -repo "kimmknight/remoteapptool" -path "$pathAxxon\Tools" `
+    -filesToDownload @("RemoteApp.Tool.6100.msi") `
+    -filesToExecute @("RemoteApp.Tool.6100.msi")
+#endregion
