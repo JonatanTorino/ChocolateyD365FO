@@ -1,43 +1,55 @@
 
-# Installation
+# Scripts de Preparación para D365FO
 
-## Using Power Shell
-Copy and past
+Este repositorio contiene scripts estandarizados de PowerShell para preparar entornos de desarrollo de Dynamics 365 Finance and Operations (D365FO).
+
+## Estructura de Scripts
+
+### Scripts Principales
+
+- **`PrepareNew-CHE.ps1`** - Prepara un entorno Cloud-Hosted Environment (CHE)
+- **`PrepareNew-UDE.ps1`** - Prepara un entorno Unified Development Environment (UDE)
+- **`PrepareNew-CommonEnvironment.ps1`** - Configuración común para todos los entornos
+- **`PrepareCommerceVMScript.ps1`** - Preparación específica para entornos de Commerce
+
+### Scripts de Utilidades
+
+- **`CommonFunctions.ps1`** - Funciones compartidas y utilitarias
+- **`Add-D365FOExtension.ps1`** - Gestión de extensiones de D365FO
+- **`DownloadFromGitHub.ps1`** - Descarga de releases desde GitHub
+- **`InstallAppCheckerDependencies.ps1`** - Instalación de dependencias para App Checker
+- **`installModulesD365FO.ps1`** - Instalación de módulos de PowerShell
+- **`Invoke-VSInstallExtension.ps1`** - Instalación de extensiones de Visual Studio
+
+## Uso
+
+### Preparar un nuevo entorno CHE
+```powershell
+.\PrepareNew-CHE.ps1
+```
+
+### Preparar un nuevo entorno UDE
+```powershell
+.\PrepareNew-UDE.ps1
+```
+
+### Instalar dependencias para App Checker
+```powershell
+.\InstallAppCheckerDependencies.ps1
+```
+
+### Instalar módulos de PowerShell para D365FO
+```powershell
+.\installModulesD365FO.ps1
+```
+
+## Instalación de Modelos Personalizados
 
 ### [DevAxCmmUtils](https://github.com/JonatanTorino/DevAxCmmUtils)
 Este modelo sirve para tener un registro del intercambio de mensajes entre el RTS y el RetailServer
 ```powershell
-# Task 1: Clone the repository
-$repositoryUrl = "https://github.com/JonatanTorino/DevAxCmmUtils"
-$localPath = "K:\Axxon\GitHub.JonatanTorino\DevAxCmmUtils"
-$modelName = "DevAxCmmUtils"
-
-# Clone the repository
-git clone $repositoryUrl $localPath | Wait-Process
-
-Write-Host -ForegroundColor Yellow "Deteniendo todos los servicios de D365FO"
-Stop-D365Environment
-
-# Task 2: Create a symbolic link
-$packagesLocalDirectory = "K:\AosService\PackagesLocalDirectory"
-$targetPath = Join-Path $localPath -ChildPath $modelName
-$linkPath = Join-Path $packagesLocalDirectory -ChildPath $modelName
-
-Write-Host -ForegroundColor Cyan "Remove existing directory if it exists $linkPath"
-Remove-Item -Path $linkPath -Recurse -Force
-
-Write-Host -ForegroundColor Cyan "Create a symbolic link to $target<Path"
-New-Item -ItemType SymbolicLink -Path $linkPath -Target $targetPath
-
-# Task 3: Compile the model
-Write-Host -ForegroundColor Green "Executing the D365 module compile command: $modelName"
-Invoke-D365ModuleFullCompile -Module $modelName
-
-Write-Host -ForegroundColor Yellow "Iniciando el servicio del AOS de D365FO"
-Start-D365EnvironmentV2 -Aos
-Write-Host -ForegroundColor Yellow "Iniciando el servicio del BATCH de D365FO"
-Start-D365EnvironmentV2 -Batch
-
+# Usando el script unificado
+.\PrepareCommerceVMScript.ps1
 ```
 
 ### [DEVTools](https://github.com/TrudAX/XppTools)
@@ -50,91 +62,45 @@ Start-D365EnvironmentV2 -Batch
 - SQL reports
 - D365FO Infolog call stack
 - D365FO DFM Tools
-```powershell
-# Task 1: Clone the repository
-$repositoryUrl = "https://github.com/TrudAX/XppTools"
-$metadata = "K:\Axxon\GitHub.JonatanTorino\XppTools"
-
-# Clone the repository
-git clone $repositoryUrl $metadata | Wait-Process
-
-Write-Host -ForegroundColor Yellow "Deteniendo todos los servicios de D365FO"
-Stop-D365Environment
-
-# Task 1: Listado de modelos
-$modelList = Get-ChildItem -Path $metadata -Directory | Select-Object -ExpandProperty Name | Where { $_ -like "DEV*" }
-$modelList
-
-# Task 2: Create a symbolic link
-Write-Host -ForegroundColor Yellow "Deteniendo todos los servicios de D365FO"
-Stop-D365Environment
-
-foreach ($modelName in $modelList) {
-    $targetPath = Join-Path $metadata -ChildPath $modelName
-    $linkPath = Join-Path $packagesLocalDirectory -ChildPath $modelName
-    
-    Write-Host -ForegroundColor Cyan "Remove existing directory if it exists $linkPath"
-    Remove-Item -Path $linkPath -Recurse -Force
-
-    Write-Host -ForegroundColor Cyan "Create a symbolic link to $targetPath"
-    Write-Host
-    New-Item -ItemType SymbolicLink -Path $linkPath -Target $targetPath
-    Write-Host
-}
-
-Write-Host
-Write-Host
-
-# # Task 3: Compile the model
-foreach ($modelName in $modelList) {
-    Write-Host -ForegroundColor Green  "Executing the D365 module compile command: $modelName"
-    Invoke-D365ModuleFullCompile -Module $modelName
-}
-
-Start-D365EnvironmentV2 -Aos
-Write-Host -ForegroundColor Yellow "Iniciando el servicio del AOS de D365FO"
-Start-D365EnvironmentV2 -Batch
-Write-Host -ForegroundColor Yellow "Iniciando el servicio del BATCH de D365FO"
-
-```
 
 ### [AOTBrowser](https://github.com/arganollc/aotbrowser)
 Dynamics 365 for Finance and Operations AOT Browser
-```powershell
-# Task 1: Clone the repository
-$repositoryUrl = "https://github.com/arganollc/aotbrowser"
-$localPath = "K:\Axxon\GitHub.JonatanTorino\AOTBrowser"
-$modelName = "AOTBrowser"
-$AOTBrowsersln = "K:\Axxon\Github.JonatanTorino\AOTBrowser\Projects\AOTBrowser\AOTBrowser.sln"
 
-# Clone the repository
-git clone $repositoryUrl $localPath | Wait-Process
+### [D365FOAdminToolkit](https://github.com/ameyer505/D365FOAdminToolkit)
+Herramientas de administración para D365FO
 
-Write-Host -ForegroundColor Yellow "Deteniendo todos los servicios de D365FO"
-Stop-D365Environment
+## Funciones Disponibles
 
-# Task 2: Create a symbolic link
-$packagesLocalDirectory = "K:\AosService\PackagesLocalDirectory"
-$targetPath = Join-Path $localPath -ChildPath "Metadata\$modelName"
-$linkPath = Join-Path $packagesLocalDirectory -ChildPath $modelName
+### Funciones de Logging
+- `Write-LogMessage` - Escribe mensajes de log con colores consistentes
+- `Test-PathAndCreate` - Verifica y crea directorios si no existen
 
-Write-Host -ForegroundColor Cyan "Remove existing directory if it exists $linkPath"
-Remove-Item -Path $linkPath -Recurse -Force
+### Funciones de Red
+- `Invoke-WebRequestWithRetry` - Realiza peticiones web con reintentos
+- `Get-LatestReleaseFromGitHub` - Obtiene información de la última release de GitHub
 
-Write-Host -ForegroundColor Cyan "Create a symbolic link to $targetPath"
-New-Item -ItemType SymbolicLink -Path $linkPath -Target $targetPath
+### Funciones de Procesos
+- `Start-ProcessAndWait` - Inicia procesos y espera a que terminen
 
-Write-Host -ForegroundColor Cyan "Start VisualStudio for build the solution $AOTBrowsersln"
-Write-Host -ForegroundColor Cyan "Then press any key for continue..."
-Read-Host
+### Funciones Específicas de D365FO
+- `Add-ExtensionToDynamicsDevConfig` - Agrega extensiones al archivo de configuración
+- `Download-ReleaseFromGitHub` - Descarga releases desde GitHub
+- `Invoke-VSInstallExtension` - Instala extensiones de Visual Studio
 
-# Task 3: Compile the model
-Write-Host -ForegroundColor Green "Executing the D365 module compile command: $modelName"
-Invoke-D365ModuleFullCompile -Module $modelName
+## Estándares de Código
 
-Write-Host -ForegroundColor Yellow "Iniciando el servicio del AOS de D365FO"
-Start-D365EnvironmentV2 -Aos
-Write-Host -ForegroundColor Yellow "Iniciando el servicio del BATCH de D365FO"
-Start-D365EnvironmentV2 -Batch
+Todos los scripts siguen estos estándares:
 
-```
+1. **Comentarios de ayuda**: Todos los scripts y funciones tienen documentación completa
+2. **Manejo de errores**: Try-catch blocks para operaciones críticas
+3. **Logging consistente**: Uso de `Write-LogMessage` para mensajes uniformes
+4. **Funciones reutilizables**: Código común extraído a `CommonFunctions.ps1`
+5. **Nombres descriptivos**: Variables y funciones con nombres claros
+6. **Validación de parámetros**: Uso de `[CmdletBinding()]` y validaciones apropiadas
+
+## Requisitos
+
+- PowerShell 5.1 o superior
+- Módulo `d365fo.tools`
+- Acceso a internet para descargas
+- Permisos de administrador para algunas operaciones
