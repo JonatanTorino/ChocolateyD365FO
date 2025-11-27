@@ -1,14 +1,9 @@
 
+#region Install main tools
 $progressPreference = 'silentlyContinue'
-Write-Host "Installing WinGet PowerShell module from PSGallery..."
-Install-PackageProvider -Name NuGet -Force | Out-Null
-nuget sources add -Name NugetOrg -Source https://api.nuget.org/v3/index.json
-Install-Module -Name Microsoft.WinGet.Client -Force -Repository PSGallery | Out-Null
-Write-Host "Using Repair-WinGetPackageManager cmdlet to bootstrap WinGet..."
-Repair-WinGetPackageManager -AllUsers
-Write-Host "Done."
-
-winget install --id Microsoft.PowerShell --source winget
+# TODO Implementar instalación de Nuget
+# TODO Implementar instalación de PowerShell
+# TODO Implementar instalación de WinGetquie
 #endregion
 
 #region Install additional applications using Chocolatey
@@ -58,7 +53,6 @@ Add-ExtensionToDynamicsDevConfig -AddInPath "$pathForVSIX\SSD365VSAddIn"
 
 #region Install Visual Studio extensions
 Invoke-VSInstallExtension -Version 2022 -PackageName 'cpmcgrath.Codealignment'
-Invoke-VSInstallExtension -Version 2022 -PackageName 'EWoodruff.VisualStudioSpellCheckerVS2022andLater'
 Invoke-VSInstallExtension -Version 2022 -PackageName 'MadsKristensen.OpeninVisualStudioCode'
 Invoke-VSInstallExtension -Version 2022 -PackageName 'MadsKristensen.TrailingWhitespace64'
 Invoke-VSInstallExtension -Version 2022 -PackageName 'VisualStudioProductTeam.ProjectSystemTools2022'
