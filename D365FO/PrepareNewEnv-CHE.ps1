@@ -60,3 +60,21 @@ if (Test-Path "$env:servicedrive\AOSService\PackagesLocalDirectory\bin\DynamicsD
 
 # Enable IIS preload
 Enable-D365IISPreload
+
+# Ejecutar preparación común del entorno
+Write-Host "Ejecutando preparación común del entorno..." -ForegroundColor Green
+
+$commonScriptPath = Join-Path $PSScriptRoot "PrepareNewEnv-CommonEnvironment.ps1"
+$allFunctions = @(
+    'Install-MainTools',
+    'Install-ChocolateyAndApps',
+    'Load-SupportScripts',
+    'Install-VSExtensionsD365FO',
+    'Install-VSMarketplaceExtensions',
+    'Install-VSCodeExtensions',
+    'Install-AdditionalTools'
+)
+
+& $commonScriptPath -RunFunction ($allFunctions -join ',')
+
+Write-Host "Proceso de preparación de CHE completado."
