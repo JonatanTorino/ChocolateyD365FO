@@ -15,9 +15,21 @@ function Install-MainTools {
     Write-Host "Ejecutando como: $(whoami)"
     Write-Host "Instalando herramientas principales (requiere admin)..."
     $progressPreference = 'silentlyContinue'
-    # TODO Implementar instalación de Nuget
+
+    # TODO Implementar instalación de WinGet & Nuget
+    # Instalar App Installer (WinGet) para Microsoft Windows Server 2025 Datacenter Azure Edition
+    Add-AppxPackage -RegisterByFamilyName -MainPackage Microsoft.DesktopAppInstaller_8wekyb3d8bbwe
+
+    $progressPreference = 'silentlyContinue'
+    Write-Host "Installing WinGet PowerShell module from PSGallery..."
+    Install-PackageProvider -Name NuGet -Force | Out-Null
+    Install-Module -Name Microsoft.WinGet.Client -Force -Repository PSGallery | Out-Null
+    Write-Host "Using Repair-WinGetPackageManager cmdlet to bootstrap WinGet..."
+    Repair-WinGetPackageManager -AllUsers
+    Write-Host "Done."
+
     # TODO Implementar instalación de PowerShell
-    # TODO Implementar instalación de WinGetquie
+    winget install --id Microsoft.PowerShell --source winget
 }
 
 function Install-ChocolateyAndApps {
@@ -135,6 +147,7 @@ function Install-VSCodeExtensions {
 
         #AI
         ,"rooveterinaryinc.roo-cline"
+        ,"kilocode.kilo-code"
 
         #CSV
         ,"phplasma.csv-to-table"
@@ -176,13 +189,13 @@ if ($PSBoundParameters.ContainsKey('RunFunction')) {
     }
 }
 # Si no, puedes dejar un comportamiento por defecto (ej. ejecutar todo)
-else {
-    Write-Host "Ejecución por defecto: corriendo todas las funciones..."
-    Install-MainTools
-    Install-ChocolateyAndApps
-    Load-SupportScripts
-    Install-VSExtensionsD365FO
-    Install-VSMarketplaceExtensions
-    Install-VSCodeExtensions
-    Install-AdditionalTools
-}
+# else {
+#     Write-Host "Ejecución por defecto: corriendo todas las funciones..."
+#     Install-MainTools
+#     Install-ChocolateyAndApps
+#     Load-SupportScripts
+#     Install-VSExtensionsD365FO
+#     Install-VSMarketplaceExtensions
+#     Install-VSCodeExtensions
+#     Install-AdditionalTools
+# }
