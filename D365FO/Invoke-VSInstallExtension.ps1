@@ -18,7 +18,14 @@ function Invoke-VSInstallExtension {
             $VSInstallDir = "C:\Program Files (x86)\Microsoft Visual Studio\Installer\resources\app\ServiceHub\Services\Microsoft.VisualStudio.Setup.Service"
         }
         '2022' {
-            $VSInstallDir = "C:\Program Files\Microsoft Visual Studio\2022\Professional\Common7\IDE\"
+            $VSEnterprisePath = "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\Common7\IDE\"
+            $VSProfessionalPath = "C:\Program Files\Microsoft Visual Studio\2022\Professional\Common7\IDE\"
+            
+            if (Test-Path $VSEnterprisePath) {
+                $VSInstallDir = $VSEnterprisePath
+            } else {
+                $VSInstallDir = $VSProfessionalPath
+            }
         }
     }
 
