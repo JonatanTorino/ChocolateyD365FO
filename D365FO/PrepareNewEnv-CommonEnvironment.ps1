@@ -28,8 +28,10 @@ function Install-MainTools {
     Repair-WinGetPackageManager -AllUsers
     Write-Host "Done."
 
-    # TODO Implementar instalación de PowerShell
+    # Implementar instalación de PowerShell
     winget install --id Microsoft.PowerShell --source winget
+    # gsudo para ejecutar comandos con privilegios elevados similar a sudo en linux
+    winget install gsudo
 }
 
 function Install-ChocolateyAndApps {
