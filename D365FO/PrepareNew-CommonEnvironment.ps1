@@ -137,25 +137,25 @@ try {
 
     # Lista de extensiones de VS a instalar
     $vsExtensions = @(
-        'AndriesDK.Highlighter',
-        'cpmcgrath.Codealignment',
-        'EWoodruff.VisualStudioSpellCheckerVS2022andLater',
-        'Loop8ack.ExtensionManager2022',
-        'MadsKristensen.OpeninVisualStudioCode',
-        'MadsKristensen.OutputWindowFilter',
-        'MadsKristensen.TrailingWhitespace64',
-        'MadsKristensen.WorkflowBrowser',
-        'MattLaceyLtd.WarnAboutTODOs',
-        'NeVeS.MermaidEditorForVisualStudio',
-        'NikolayBalakin.Outputenhancer',
-        'SharpDevelopTeam.ILSpy2022',
-        'ShemeerNS.FilePathOnFooter',
-        'ShemeerNS.QuickSolutionFolderX64',
-        'ViktarKarpach.DebugAttachManager2022',
-        'VisualStudioPlatformTeam.MatchMargin2022',
-        'VisualStudioPlatformTeam.SolutionErrorVisualizer2022',
-        'VisualStudioPlatformTeam.TimeStampMargin2022',
-        'VisualStudioProductTeam.ProjectSystemTools2022'
+        # 'AndriesDK.Highlighter',
+        # 'cpmcgrath.Codealignment',
+        # 'EWoodruff.VisualStudioSpellCheckerVS2022andLater',
+        # 'Loop8ack.ExtensionManager2022',
+        # 'MadsKristensen.OpeninVisualStudioCode',
+        # 'MadsKristensen.OutputWindowFilter',
+        # 'MadsKristensen.TrailingWhitespace64',
+        # 'MadsKristensen.WorkflowBrowser',
+        # 'MattLaceyLtd.WarnAboutTODOs',
+        # 'NeVeS.MermaidEditorForVisualStudio',
+        # 'NikolayBalakin.Outputenhancer',
+        # 'SharpDevelopTeam.ILSpy2022',
+        # 'ShemeerNS.FilePathOnFooter',
+        # 'ShemeerNS.QuickSolutionFolderX64',
+        # 'ViktarKarpach.DebugAttachManager2022',
+        # 'VisualStudioPlatformTeam.MatchMargin2022',
+        # 'VisualStudioPlatformTeam.SolutionErrorVisualizer2022',
+        # 'VisualStudioPlatformTeam.TimeStampMargin2022',
+        # 'VisualStudioProductTeam.ProjectSystemTools2022'
     )
 
     $installedCount = 0
@@ -222,7 +222,6 @@ try {
         "jebbs.plantuml",
         "claudineyqr.plantuml-snippets",
         "hediet.vscode-drawio",
-        "ms-vscode.copilot-mermaid-diagram",
 
         # REST Client
         "humao.rest-client",

@@ -163,7 +163,7 @@ try {
     Write-LogMessage "Error habilitando IIS preload: $($_.Exception.Message)" -Level Warning
 }
 
-# Ejecutar script de entorno común
+# region Ejecutar script de entorno común
 Write-LogMessage "Ejecutando preparación de entorno común..." -Level Info
 try {
     & ".\PrepareNew-CommonEnvironment.ps1"
@@ -171,6 +171,7 @@ try {
 } catch {
     Write-LogMessage "Error en preparación de entorno común: $($_.Exception.Message)" -Level Error
 }
+#endregion
 
 #region Herramientas adicionales
 Write-LogMessage "Instalando herramientas adicionales..." -Level Info
